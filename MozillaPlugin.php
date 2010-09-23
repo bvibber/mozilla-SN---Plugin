@@ -17,12 +17,24 @@ if (!defined('STATUSNET')) {
     exit(1);
 }
 
+define('PLUGINDIR', '/local/plugins');
+
 class MozillaPlugin extends Plugin
 {
     function __construct($code=null) 
     {
         parent::__construct();
     }
+
+    function initialize()
+	{
+	    return true;
+	}
+	
+	function cleanup()
+	{
+	    return true;
+	}	
 
     function onStartSecondaryNav($action) 
     {
@@ -53,12 +65,10 @@ class MozillaPlugin extends Plugin
     function onStartLoadDoc(&$title, &$output)
     {
 	    switch($title) 
-	    {
-		
+	    {		
 		    case "mozilla":
-		    case "badge":
 		
-		    	$filename = INSTALLDIR.'/plugins/Mozilla/doc-src/' . $title;
+		    	$filename = INSTALLDIR . PLUGINDIR . '/Mozilla/doc-src/' . $title;
 	            $c = file_get_contents($filename);
 	            $output = common_markup_to_html($c);
 	            return false;
@@ -67,11 +77,6 @@ class MozillaPlugin extends Plugin
 	    }
         return true;
     }
-    	
-    /**
-     * Notes: 
-     * EndShowStyles is in lib/actions.php
-     */
 	
     function onEndShowStyles($action) 
     {
@@ -80,15 +85,16 @@ class MozillaPlugin extends Plugin
 	
     function onEndShowSections ($action) 
     { 
-        $plugin_images_directory = 'plugins/Mozilla/images';
+        $images_directory =  PLUGINDIR . '/Mozilla/images/';
 
         switch ($action->trimmed('action'))
         {
 	        case 'profilesettings':
 	        case 'register':
 	
+                $image = $images_directory . 'mozilla_Drumbeat__get_involved.png'; print $image;
 	            $action->elementStart('a', array('href' => 'http://www.mozilla.org/drumbeat'));
-			    $action->element('img', array('src' => "/$plugin_images_directory/mozilla_Drumbeat__get_involved.png", 'alt' => 'mozilla Drumbeat - Get involved'), '');
+			    $action->element('img', array('src' => $image, 'alt' => 'mozilla Drumbeat - Get involved'), '');
 			    $action->elementEnd('a');
 	
 	        break;	
@@ -103,47 +109,4 @@ class MozillaPlugin extends Plugin
           
         return true;
     }
-
- 
-
-/***
-**
-** Terms and Conditions
-** 
-***/
-    
-    function onStartRegistrationTry($action)
-    {
-        if (!$action->boolean('tos')) 
-        {
-            $action->showForm(_('You can\'t register if you don\'t agree to the terms & conditions.'));
-            return false;  
-        }
-        return true;  
-    }
-
-    function onEndRegistrationFormData($action)
-    {
-        $attrs = array('type' => 'checkbox',
-                       'id' => 'tos',
-                       'class' => 'checkbox',
-                       'name' => 'tos',
-                       'value' => 'true');
-        if ($action->boolean('tos')) 
-        {
-            $attrs['checked'] = 'checked';
-        }
-        
-        $action->elementStart('li');
-        $action->element('input', $attrs);
-        $action->elementStart('label', array('class' => 'checkbox', 'for' => 'tos'));
-        $action->text(_('Please read our '));
-        $action->element('a', array('href' => '/doc/tos', 'target' => '_blank'), 'Terms of Service');
-        $action->text(_(' only then tick the checkbox to confirm your agreement.'));
-        $action->elementEnd('label');
-        $action->elementEnd('li');
-      
-        return true;
-    }
-
 }
