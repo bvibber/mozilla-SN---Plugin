@@ -17,8 +17,6 @@ if (!defined('STATUSNET')) {
     exit(1);
 }
 
-define('PLUGINDIR', '/local/plugins');
-
 class MozillaPlugin extends Plugin
 {
     function __construct($code=null) 
@@ -46,6 +44,7 @@ class MozillaPlugin extends Plugin
 
     function onStartShowFooter($action) 
     {	
+	   $output = "";
        $action->elementStart('div', array('id' => 'footer'));
        $action->showSecondaryNav(); 
        $action->elementStart('dl', array('id' => 'licenses'));
@@ -68,7 +67,7 @@ class MozillaPlugin extends Plugin
 	    {		
 		    case "mozilla":
 		
-		    	$filename = INSTALLDIR . PLUGINDIR . '/Mozilla/doc-src/' . $title;
+		        $filename = common_path('local/plugins/Mozilla/doc-src/') . $title;
 	            $c = file_get_contents($filename);
 	            $output = common_markup_to_html($c);
 	            return false;
@@ -80,19 +79,19 @@ class MozillaPlugin extends Plugin
 	
     function onEndShowStyles($action) 
     {
-        $action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => common_path('plugins/Mozilla/MozillaPlugin.css')));		
+        $action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => common_path('/local/plugins/Mozilla/MozillaPlugin.css')));		
     }
 	
     function onEndShowSections ($action) 
     { 
-        $images_directory =  PLUGINDIR . '/Mozilla/images/';
+        $images_directory = common_path('local/plugins/Mozilla/images/');
 
         switch ($action->trimmed('action'))
         {
 	        case 'profilesettings':
 	        case 'register':
 	
-                $image = $images_directory . 'mozilla_Drumbeat__get_involved.png'; print $image;
+                $image = $images_directory . 'mozilla_Drumbeat__get_involved.png';
 	            $action->elementStart('a', array('href' => 'http://www.mozilla.org/drumbeat'));
 			    $action->element('img', array('src' => $image, 'alt' => 'mozilla Drumbeat - Get involved'), '');
 			    $action->elementEnd('a');
@@ -100,12 +99,12 @@ class MozillaPlugin extends Plugin
 	        break;	
         }
 
-	    if ($action->trimmed('action') == 'doc') 
-        { 
-            switch ($action->title)
-            {
-            }
-        }
+	    //if ($action->trimmed('action') == 'doc') 
+        //{ 
+        //    switch ($action->title)
+        //    {
+        //    }
+        //}
           
         return true;
     }
