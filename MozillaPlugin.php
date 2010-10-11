@@ -79,7 +79,7 @@ class MozillaPlugin extends Plugin
 	
     function onEndShowStyles($action) 
     {
-        $action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => common_path('/local/plugins/Mozilla/MozillaPlugin.css')));		
+        $action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => common_path('local/plugins/Mozilla/MozillaPlugin.css')));		
     }
 	
     function onEndShowSections ($action) 
