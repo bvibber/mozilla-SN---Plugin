@@ -93,7 +93,7 @@ class MozillaPlugin extends Plugin
 
                 $image = $images_directory . 'mozilla_Drumbeat__get_involved.png';
                 $action->elementStart('a', array('href' => 'http://www.mozilla.org/drumbeat'));
-                $action->element('img', array('src' => $image, 'alt' => 'mozilla Drumbeat - Get involved'), '');
+                $action->element('img', array('src' => $image, 'alt' => 'mozilla Drumbeat - Get involved'));
                 $action->elementEnd('a');
 
             break;
